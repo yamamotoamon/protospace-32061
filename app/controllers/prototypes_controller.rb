@@ -22,12 +22,12 @@ class PrototypesController < ApplicationController
   def show
     @prototype = Prototype.find(params[:id])
     @comment = Comment.new
-    @comments = Comment.all
+    @comments = @prototype.comments
   end
 
   def edit
     @prototype = Prototype.find(params[:id])
-    unless current_user.id == @prototype.id
+    unless user_signed_in?
       redirect_to root_path 
     end
   end
@@ -50,7 +50,7 @@ class PrototypesController < ApplicationController
 
   private
   def prototype_params
-    params.require(:prototype).permit(:title, :catch_copy, :concept, :image).merge(user_id: current_user.id)
+    params.permit(:title, :catch_copy, :concept, :image).merge(user_id: current_user.id)
   end
 
   
